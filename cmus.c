@@ -69,6 +69,7 @@ static void *(*x11_open)(void *) = NULL;
 static int (*x11_raise)(void *, int) = NULL;
 static int (*x11_close)(void *) = NULL;
 
+
 int cmus_init(void)
 {
 	playable_exts = ip_get_supported_extensions();
@@ -142,29 +143,31 @@ void save_track_info_to_db(struct track_info *ti)
         char artist[MAX_LEN];
         sqlite3 *db;
 
-        /* Temp name for testing */
         char *db_full_path = "/home/nic/.local/share/cmus-stats/cmus-stats.db";
-
         char *query = "INSERT INTO SONGS (ID, TITLE, ARTIST, DURATION) " \
                       "VALUES (?, ?, ?, ?)";
-
         char *empty = "None";
 
         db = connect_to_db(db_full_path);
         if (db == 0)
             printf("Can't connect");
 
-        if (strlen(title) == 0 || strlen(title) > MAX_LEN)
+        if (ti->title == NULL)
+            strcpy(title, empty);
+        else if (strlen(ti->title) > MAX_LEN)
             strcpy(title, empty);
         else
             strcpy(title, ti->title);
 
-        if (strlen(artist) == 0 || strlen(artist) > MAX_LEN)
+        if (ti->artist == NULL)
+            strcpy(artist, empty);
+        else if (strlen(ti->artist) > MAX_LEN)
             strcpy(artist, empty);
         else
             strcpy(artist, ti->artist);
 
         res = insert_data(db, query, ti->uid, title, artist, ti->duration);
+        sqlite3_close(db);
 }
 
 void cmus_play_file(const char *filename)

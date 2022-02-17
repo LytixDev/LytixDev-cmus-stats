@@ -98,7 +98,12 @@ void cmus_raise_vte(void);
 
 bool cmus_queue_active(void);
 
+
 /* cmus-stats functions prototypes */
 void save_track_info_to_db(struct track_info *ti);
+/* sets the database path using the $HOME env and creates a connection */
+int cmus_stats_init(void);
+/* closes the connection to the db */
+int cmus_stats_close(void);
 
 #endif
