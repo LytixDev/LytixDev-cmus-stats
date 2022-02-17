@@ -44,17 +44,11 @@ int insert_data(sqlite3 *db, char *query, int id, const char *title, const char 
     sqlite3_stmt *res;
     int rc = sqlite3_prepare_v2(db, query, -1, &res, 0);
 
-    printf("%d\n", id);
-    printf("%s\n", title);
-    printf("%s\n", artist);
-    printf("%d\n", duration);
-
     if (rc == SQLITE_OK) {
         sqlite3_bind_int(res, 1, id);
         sqlite3_bind_text(res, 2, title, strlen(title), NULL);
         sqlite3_bind_text(res, 3, artist, strlen(artist), NULL);
         sqlite3_bind_int(res, 4, duration);
-        sqlite3_bind_int(res, 5, play_count);
     } else {
         fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(db));
         return 1;
