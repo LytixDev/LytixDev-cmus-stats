@@ -42,14 +42,14 @@ cmus-y := \
 	job.o keys.o keyval.o lib.o load_dir.o locking.o mergesort.o misc.o options.o \
 	output.o pcm.o player.o play_queue.o pl.o rbtree.o read_wrapper.o search_mode.o \
 	search.o server.o spawn.o tabexp_file.o tabexp.o track_info.o track.o tree.o \
-	uchar.o u_collate.o ui_curses.o window.o worker.o xstrjoin.o
+	uchar.o u_collate.o ui_curses.o window.o worker.o xstrjoin.o sqlite_handler.o
 
 cmus-$(CONFIG_MPRIS) += mpris.o
 
 $(cmus-y): CFLAGS += $(PTHREAD_CFLAGS) $(NCURSES_CFLAGS) $(ICONV_CFLAGS) $(DL_CFLAGS)
 
 cmus: $(cmus-y) file.o path.o prog.o xmalloc.o
-	$(call cmd,ld,$(CMUS_LIBS))
+	$(call cmd,ld,$(CMUS_LIBS)) -l sqlite3
 
 cmus-remote: main.o file.o misc.o path.o prog.o xmalloc.o xstrjoin.o
 	$(call cmd,ld,$(COMPAT_LIBS))

@@ -1,4 +1,5 @@
 /*
+ * Copyright 2022 Nicolai Brand
  * Copyright 2008-2013 Various Authors
  * Copyright 2004 Timo Hirvonen
  *
@@ -96,5 +97,8 @@ int cmus_can_raise_vte(void);
 void cmus_raise_vte(void);
 
 bool cmus_queue_active(void);
+
+/* cmus-stats functions prototypes */
+void save_track_info_to_db(struct track_info *ti);
 
 #endif

@@ -1,4 +1,5 @@
 /*
+ * Copyright 2022 Nicolai Brand
  * Copyright 2008-2013 Various Authors
  * Copyright 2004 Timo Hirvonen
  *
@@ -38,6 +39,7 @@
 #include "gbuf.h"
 #include "discid.h"
 #include "locking.h"
+#include "sqlite_handler.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -54,7 +56,6 @@ typedef int (*save_tracks_cb)(void *data, struct track_info *ti);
 
 static char **playable_exts;
 static const char * const playlist_exts[] = { "m3u", "pl", "pls", NULL };
-
 int cmus_next_track_request_fd;
 static bool play_queue_active = false;
 static int cmus_next_track_request_fd_priv;
@@ -133,9 +134,24 @@ void cmus_prev_album(void)
 		player_set_file(info);
 }
 
+void save_track_info_to_db(struct track_info *ti)
+{
+        /* Temp name for testing */
+        char *db_full_path = "/home/nic/.local/share/cmus-stats/cmus-stats.db";
+        sqlite3 *db = connect_to_db(db_full_path);
+        if (db == 0)
+            printf("Can't connect");
+
+        char *query = "INSERT INTO SONGS (ID, TITLE, ARTIST, DURATION, PLAY_COUNT) " \
+                      "VALUES (?, ?, ?, ?, ?)";
+
+        /* IMPORTANT: FIX BUG WHERE IF EITHER OF THE FIELDS UNDER ARE NOT INITILIAZED IT WILL RESULT IN SEG FAULT */
+        int res = insert_data(db, query, ti->uid, ti->title, ti->artist, ti->duration, ti->play_count);
+}
+
 void cmus_play_file(const char *filename)
 {
-	struct track_info *ti;
+        struct track_info *ti;
 
 	cache_lock();
 	ti = cache_get_ti(filename, 0);
@@ -145,6 +161,7 @@ void cmus_play_file(const char *filename)
 		return;
 	}
 
+        save_track_info_to_db(ti);
 	player_play_file(ti);
 }
 
