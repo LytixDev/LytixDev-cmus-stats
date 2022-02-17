@@ -137,25 +137,29 @@ void cmus_prev_album(void)
 void save_track_info_to_db(struct track_info *ti)
 {
         int MAX_LEN = 512;
+        int res;
         char title[MAX_LEN];
         char artist[MAX_LEN];
+        sqlite3 *db;
 
         /* Temp name for testing */
         char *db_full_path = "/home/nic/.local/share/cmus-stats/cmus-stats.db";
-        sqlite3 *db = connect_to_db(db_full_path);
-        if (db == 0)
-            printf("Can't connect");
 
         char *query = "INSERT INTO SONGS (ID, TITLE, ARTIST, DURATION) " \
                       "VALUES (?, ?, ?, ?)";
 
+        char *empty = "None";
+
+        db = connect_to_db(db_full_path);
+        if (db == 0)
+            printf("Can't connect");
+
         if (strlen(title) == 0 || strlen(title) > MAX_LEN)
-            strcpy(title, "None");
-
+            strcpy(title, empty);
         if (strlen(artist) == 0 || strlen(artist) > MAX_LEN)
-            strcpy(artist, "None");
+            strcpy(artist, empty);
 
-        int res = insert_data(db, query, ti->uid, title, artist, ti->duration);
+        res = insert_data(db, query, ti->uid, title, artist, ti->duration);
 }
 
 void cmus_play_file(const char *filename)

@@ -22,39 +22,42 @@
 
 #include "sqlite_handler.h"
 
+
 sqlite3 *connect_to_db(char *db_name)
 {
-    sqlite3 *db;
-    int rc;
+        sqlite3 *db;
+        int rc;
 
-    rc = sqlite3_open(db_name, &db);
+        rc = sqlite3_open(db_name, &db);
 
-    if(rc) {
-        //fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
-        return 0;
-    } else {
-        //fprintf(stdout, "Opened databse '%s' successfully\n", db_name);
-    }
-    return db;
+        if(rc) {
+                //fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+                return 0;
+        } else {
+                //fprintf(stdout, "Opened databse '%s' successfully\n", db_name);
+        }
+
+        return db;
 }
 
 /* insert query parameterized */
-int insert_data(sqlite3 *db, char *query, int id, const char *title, const char *artist, int duration)
+int insert_data(sqlite3 *db, char *query, int id, char *title, char *artist, int duration)
 {
-    sqlite3_stmt *res;
-    int rc = sqlite3_prepare_v2(db, query, -1, &res, 0);
+        sqlite3_stmt *res;
+        int rc = sqlite3_prepare_v2(db, query, -1, &res, 0);
 
-    if (rc == SQLITE_OK) {
-        sqlite3_bind_int(res, 1, id);
-        sqlite3_bind_text(res, 2, title, strlen(title), NULL);
-        sqlite3_bind_text(res, 3, artist, strlen(artist), NULL);
-        sqlite3_bind_int(res, 4, duration);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(db));
-        return 1;
-    }
+        if (rc == SQLITE_OK) {
+                sqlite3_bind_int(res, 1, id);
+                sqlite3_bind_text(res, 2, title, strlen(title), NULL);
+                sqlite3_bind_text(res, 3, artist, strlen(artist), NULL);
+                sqlite3_bind_int(res, 4, duration);
+        } else {
+                fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(db));
+                return 1;
+        }
 
-    sqlite3_step(res);
-    sqlite3_finalize(res);
-    return 0;
+        sqlite3_step(res);
+        sqlite3_finalize(res);
+
+        return 0;
 }
