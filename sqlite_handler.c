@@ -39,7 +39,7 @@ sqlite3 *connect_to_db(char *db_name)
 }
 
 /* insert query parameterized */
-int insert_data(sqlite3 *db, char *query, int id, const char *title, const char *artist, int duration, int play_count)
+int insert_data(sqlite3 *db, char *query, int id, const char *title, const char *artist, int duration)
 {
     sqlite3_stmt *res;
     int rc = sqlite3_prepare_v2(db, query, -1, &res, 0);
@@ -48,7 +48,6 @@ int insert_data(sqlite3 *db, char *query, int id, const char *title, const char 
     printf("%s\n", title);
     printf("%s\n", artist);
     printf("%d\n", duration);
-    printf("%d\n", play_count);
 
     if (rc == SQLITE_OK) {
         sqlite3_bind_int(res, 1, id);

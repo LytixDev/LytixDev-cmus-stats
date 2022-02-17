@@ -142,11 +142,11 @@ void save_track_info_to_db(struct track_info *ti)
         if (db == 0)
             printf("Can't connect");
 
-        char *query = "INSERT INTO SONGS (ID, TITLE, ARTIST, DURATION, PLAY_COUNT) " \
-                      "VALUES (?, ?, ?, ?, ?)";
+        char *query = "INSERT INTO SONGS (ID, TITLE, ARTIST, DURATION) " \
+                      "VALUES (?, ?, ?, ?)";
 
         /* IMPORTANT: FIX BUG WHERE IF EITHER OF THE FIELDS UNDER ARE NOT INITILIAZED IT WILL RESULT IN SEG FAULT */
-        int res = insert_data(db, query, ti->uid, ti->title, ti->artist, ti->duration, ti->play_count);
+        int res = insert_data(db, query, ti->uid, ti->title, ti->artist, ti->duration);
 }
 
 void cmus_play_file(const char *filename)
