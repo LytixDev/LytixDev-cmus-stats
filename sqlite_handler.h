@@ -18,4 +18,4 @@
 #include <sqlite3.h>
 
 sqlite3 *connect_to_db(char *db_name);
-int insert_data(sqlite3 *db, char *query, int id, const char *title, const char *artist, int duration, int play_count);
+int insert_data(sqlite3 *db, char *query, int id, char *title, char *artist, int duration);

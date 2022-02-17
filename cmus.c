@@ -69,6 +69,7 @@ static void *(*x11_open)(void *) = NULL;
 static int (*x11_raise)(void *, int) = NULL;
 static int (*x11_close)(void *) = NULL;
 
+
 int cmus_init(void)
 {
 	playable_exts = ip_get_supported_extensions();
@@ -136,17 +137,37 @@ void cmus_prev_album(void)
 
 void save_track_info_to_db(struct track_info *ti)
 {
-        /* Temp name for testing */
+        int MAX_LEN = 512;
+        int res;
+        char title[MAX_LEN];
+        char artist[MAX_LEN];
+        sqlite3 *db;
+
         char *db_full_path = "/home/nic/.local/share/cmus-stats/cmus-stats.db";
-        sqlite3 *db = connect_to_db(db_full_path);
+        char *query = "INSERT INTO SONGS (ID, TITLE, ARTIST, DURATION) " \
+                      "VALUES (?, ?, ?, ?)";
+        char *empty = "None";
+
+        db = connect_to_db(db_full_path);
         if (db == 0)
             printf("Can't connect");
 
-        char *query = "INSERT INTO SONGS (ID, TITLE, ARTIST, DURATION, PLAY_COUNT) " \
-                      "VALUES (?, ?, ?, ?, ?)";
+        if (ti->title == NULL)
+            strcpy(title, empty);
+        else if (strlen(ti->title) > MAX_LEN)
+            strcpy(title, empty);
+        else
+            strcpy(title, ti->title);
 
-        /* IMPORTANT: FIX BUG WHERE IF EITHER OF THE FIELDS UNDER ARE NOT INITILIAZED IT WILL RESULT IN SEG FAULT */
-        int res = insert_data(db, query, ti->uid, ti->title, ti->artist, ti->duration, ti->play_count);
+        if (ti->artist == NULL)
+            strcpy(artist, empty);
+        else if (strlen(ti->artist) > MAX_LEN)
+            strcpy(artist, empty);
+        else
+            strcpy(artist, ti->artist);
+
+        res = insert_data(db, query, ti->uid, title, artist, ti->duration);
+        sqlite3_close(db);
 }
 
 void cmus_play_file(const char *filename)
