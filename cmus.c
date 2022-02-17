@@ -156,8 +156,13 @@ void save_track_info_to_db(struct track_info *ti)
 
         if (strlen(title) == 0 || strlen(title) > MAX_LEN)
             strcpy(title, empty);
+        else
+            strcpy(title, ti->title);
+
         if (strlen(artist) == 0 || strlen(artist) > MAX_LEN)
             strcpy(artist, empty);
+        else
+            strcpy(artist, ti->artist);
 
         res = insert_data(db, query, ti->uid, title, artist, ti->duration);
 }
