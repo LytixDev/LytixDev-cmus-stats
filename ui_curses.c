@@ -1,4 +1,5 @@
 /*
+ * Copyright 2022 Nicolai Brand
  * Copyright 2008-2013 Various Authors
  * Copyright 2004-2005 Timo Hirvonen
  *
@@ -2369,6 +2370,7 @@ static void init_all(void)
 	cmdline_init();
 	commands_init();
 	search_mode_init();
+        cmus_stats_init();
 
 	/* almost everything must be initialized now */
 	options_load();
@@ -2421,6 +2423,7 @@ static void exit_all(void)
 
 	server_exit();
 	cmus_exit();
+        cmus_stats_close();
 	if (resume_cmus)
 		cmus_save(play_queue_for_each, play_queue_autosave_filename,
 				NULL);

@@ -69,6 +69,9 @@ static void *(*x11_open)(void *) = NULL;
 static int (*x11_raise)(void *, int) = NULL;
 static int (*x11_close)(void *) = NULL;
 
+sqlite3 *db;
+char db_full_path[512];
+bool db_connected;
 
 int cmus_init(void)
 {
@@ -77,6 +80,32 @@ int cmus_init(void)
 	job_init();
 	play_queue_init();
 	return 0;
+}
+
+void cmus_stats_init(void)
+{
+    char *homedir = getenv("HOME");
+    char *postfix = "/.local/share/cmus-stats/cmus-stats.db";
+    if (homedir == NULL) {
+        db_connected = 0;
+        return;
+    }
+
+    strcpy(db_full_path, homedir);
+    strcat(db_full_path, postfix);
+
+    db = connect_to_db(db_full_path);
+    if (db == 0) {
+        db_connected = 0;
+        return;
+    }
+    
+    db_connected = 1;
+}
+
+void cmus_stats_close(void)
+{
+    sqlite3_close(db);
 }
 
 void cmus_exit(void)
@@ -141,9 +170,9 @@ void save_track_info_to_db(struct track_info *ti)
         int res;
         char title[MAX_LEN];
         char artist[MAX_LEN];
-        sqlite3 *db;
+        //sqlite3 *db;
 
-        char *db_full_path = "/home/nic/.local/share/cmus-stats/cmus-stats.db";
+        //char *db_full_path = "/home/nic/.local/share/cmus-stats/cmus-stats.db";
         char *query = "INSERT INTO SONGS (ID, TITLE, ARTIST, DURATION) " \
                       "VALUES (?, ?, ?, ?)";
         char *empty = "None";
@@ -182,7 +211,8 @@ void cmus_play_file(const char *filename)
 		return;
 	}
 
-        save_track_info_to_db(ti);
+        if (db_connected)
+            save_track_info_to_db(ti);
 	player_play_file(ti);
 }
 
