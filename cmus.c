@@ -84,28 +84,29 @@ int cmus_init(void)
 
 void cmus_stats_init(void)
 {
-    char *homedir = getenv("HOME");
-    char *postfix = "/.local/share/cmus-stats/cmus-stats.db";
-    if (homedir == NULL) {
-        db_connected = 0;
-        return;
-    }
+        char *homedir = getenv("HOME");
+        char *postfix = "/.local/share/cmus-stats/cmus-stats.db";
+        if (homedir == NULL) {
+                db_connected = 0;
+                return;
+        }
 
-    strcpy(db_full_path, homedir);
-    strcat(db_full_path, postfix);
+        strcpy(db_full_path, homedir);
+        strcat(db_full_path, postfix);
 
-    db = connect_to_db(db_full_path);
-    if (db == 0) {
-        db_connected = 0;
-        return;
-    }
-    
-    db_connected = 1;
+        db = connect_to_db(db_full_path);
+        if (db == NULL) {
+                db_connected = 0;
+                return;
+        }
+        db_connected = 1;
+
+        create_table(db);
 }
 
 void cmus_stats_close(void)
 {
-    sqlite3_close(db);
+        sqlite3_close(db);
 }
 
 void cmus_exit(void)

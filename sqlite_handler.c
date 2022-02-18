@@ -32,7 +32,7 @@ sqlite3 *connect_to_db(char *db_name)
 
         if(rc) {
                 //fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
-                return 0;
+                return NULL;
         } else {
                 //fprintf(stdout, "Opened databse '%s' successfully\n", db_name);
         }
@@ -60,4 +60,22 @@ int insert_data(sqlite3 *db, char *query, int id, char *title, char *artist, int
         sqlite3_finalize(res);
 
         return 0;
+}
+
+int create_table(sqlite3 *db)
+{
+        char *query = "CREATE TABLE SONGS("  \
+                      "ID INT PRIMARY KEY NOT NULL," \
+                      "TITLE VARCHAR," \
+                      "ARTIST VARCHAR," \
+                      "DURATION INT);";
+        char *err_msg = 0;
+        int rc = sqlite3_exec(db, query, NULL, 0, &err_msg);
+
+        if (rc != SQLITE_OK) {
+                //fprintf(stderr, "SQL error: %s\n", err_msg);
+                sqlite3_free(err_msg);
+                return 0;
+        } else 
+                return 1;
 }
