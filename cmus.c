@@ -87,7 +87,7 @@ void cmus_stats_init(void)
         char *homedir = getenv("HOME");
         char *postfix = "/.local/share/cmus-stats/cmus-stats.db";
         if (homedir == NULL) {
-                db_connected = 0;
+                db_connected = false;
                 return;
         }
 
@@ -96,10 +96,10 @@ void cmus_stats_init(void)
 
         db = connect_to_db(db_full_path);
         if (db == NULL) {
-                db_connected = 0;
+                db_connected = false;
                 return;
         }
-        db_connected = 1;
+        db_connected = true;
 
         create_table(db);
 }
@@ -168,19 +168,11 @@ void cmus_prev_album(void)
 void save_track_info_to_db(struct track_info *ti)
 {
         int MAX_LEN = 512;
-        int res;
         char title[MAX_LEN];
         char artist[MAX_LEN];
-        //sqlite3 *db;
-
-        //char *db_full_path = "/home/nic/.local/share/cmus-stats/cmus-stats.db";
         char *query = "INSERT INTO SONGS (ID, TITLE, ARTIST, DURATION) " \
                       "VALUES (?, ?, ?, ?)";
         char *empty = "None";
-
-        db = connect_to_db(db_full_path);
-        if (db == 0)
-            printf("Can't connect");
 
         if (ti->title == NULL)
             strcpy(title, empty);
@@ -196,8 +188,7 @@ void save_track_info_to_db(struct track_info *ti)
         else
             strcpy(artist, ti->artist);
 
-        res = insert_data(db, query, ti->uid, title, artist, ti->duration);
-        sqlite3_close(db);
+        insert_data(db, query, ti->uid, title, artist, ti->duration);
 }
 
 void cmus_play_file(const char *filename)
@@ -214,6 +205,7 @@ void cmus_play_file(const char *filename)
 
         if (db_connected)
             save_track_info_to_db(ti);
+
 	player_play_file(ti);
 }
 
