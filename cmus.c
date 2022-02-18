@@ -87,7 +87,7 @@ void cmus_stats_init(void)
         char *homedir = getenv("HOME");
         char *postfix = "/.local/share/cmus-stats/cmus-stats.db";
         if (homedir == NULL) {
-                db_connected = 0;
+                db_connected = false;
                 return;
         }
 
@@ -96,10 +96,10 @@ void cmus_stats_init(void)
 
         db = connect_to_db(db_full_path);
         if (db == NULL) {
-                db_connected = 0;
+                db_connected = false;
                 return;
         }
-        db_connected = 1;
+        db_connected = true;
 
         create_table(db);
 }
