@@ -65,7 +65,7 @@ int insert_data(sqlite3 *db, char *query, int id, char *title, char *artist, int
 int create_table(sqlite3 *db)
 {
         char *query = "CREATE TABLE SONGS("  \
-                      "ID INT PRIMARY KEY NOT NULL," \
+                      "ID INT NOT NULL," \
                       "TITLE VARCHAR," \
                       "ARTIST VARCHAR," \
                       "DURATION INT);";
