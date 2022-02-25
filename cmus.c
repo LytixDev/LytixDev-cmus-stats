@@ -40,6 +40,7 @@
 #include "discid.h"
 #include "locking.h"
 #include "sqlite_handler.h"
+#include "stat_taking.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -69,10 +70,6 @@ static void *(*x11_open)(void *) = NULL;
 static int (*x11_raise)(void *, int) = NULL;
 static int (*x11_close)(void *) = NULL;
 
-sqlite3 *db;
-char db_full_path[512];
-bool db_connected;
-
 int cmus_init(void)
 {
 	playable_exts = ip_get_supported_extensions();
@@ -80,33 +77,6 @@ int cmus_init(void)
 	job_init();
 	play_queue_init();
 	return 0;
-}
-
-void cmus_stats_init(void)
-{
-        char *homedir = getenv("HOME");
-        char *postfix = "/.local/share/cmus-stats/cmus-stats.db";
-        if (homedir == NULL) {
-                db_connected = false;
-                return;
-        }
-
-        strcpy(db_full_path, homedir);
-        strcat(db_full_path, postfix);
-
-        db = connect_to_db(db_full_path);
-        if (db == NULL) {
-                db_connected = false;
-                return;
-        }
-        db_connected = true;
-
-        create_table(db);
-}
-
-void cmus_stats_close(void)
-{
-        sqlite3_close(db);
 }
 
 void cmus_exit(void)
@@ -165,32 +135,6 @@ void cmus_prev_album(void)
 		player_set_file(info);
 }
 
-void save_track_info_to_db(struct track_info *ti)
-{
-        int MAX_LEN = 512;
-        char title[MAX_LEN];
-        char artist[MAX_LEN];
-        char *query = "INSERT INTO SONGS (ID, TITLE, ARTIST, DURATION) " \
-                      "VALUES (?, ?, ?, ?)";
-        char *empty = "None";
-
-        if (ti->title == NULL)
-            strcpy(title, empty);
-        else if (strlen(ti->title) > MAX_LEN)
-            strcpy(title, empty);
-        else
-            strcpy(title, ti->title);
-
-        if (ti->artist == NULL)
-            strcpy(artist, empty);
-        else if (strlen(ti->artist) > MAX_LEN)
-            strcpy(artist, empty);
-        else
-            strcpy(artist, ti->artist);
-
-        insert_data(db, query, ti->uid, title, artist, ti->duration);
-}
-
 void cmus_play_file(const char *filename)
 {
         struct track_info *ti;
@@ -203,7 +147,7 @@ void cmus_play_file(const char *filename)
 		return;
 	}
 
-        if (db_connected)
+        if (db_connected())
             save_track_info_to_db(ti);
 
 	player_play_file(ti);

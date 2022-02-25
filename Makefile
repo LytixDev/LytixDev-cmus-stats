@@ -18,7 +18,6 @@ include scripts/lib.mk
 
 CFLAGS += -D_FILE_OFFSET_BITS=64
 
-
 FFMPEG_CFLAGS += $(shell pkg-config --cflags libswresample)
 FFMPEG_LIBS += $(shell pkg-config --libs libswresample)
 
@@ -43,7 +42,8 @@ cmus-y := \
 	job.o keys.o keyval.o lib.o load_dir.o locking.o mergesort.o misc.o options.o \
 	output.o pcm.o player.o play_queue.o pl.o rbtree.o read_wrapper.o search_mode.o \
 	search.o server.o spawn.o tabexp_file.o tabexp.o track_info.o track.o tree.o \
-	uchar.o u_collate.o ui_curses.o window.o worker.o xstrjoin.o sqlite_handler.o
+	uchar.o u_collate.o ui_curses.o window.o worker.o xstrjoin.o sqlite_handler.o \
+	stat_taking.o
 
 cmus-$(CONFIG_MPRIS) += mpris.o
 

@@ -1,4 +1,5 @@
 /*
+ * Copyright 2022 Nicolai Brand
  * Copyright 2008-2013 Various Authors
  * Copyright 2006 Timo Hirvonen
  *
@@ -16,7 +17,6 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "cmus.h"
 #include "pl.h"
 #include "prog.h"
 #include "editable.h"
@@ -31,6 +31,7 @@
 #include "worker.h"
 #include "uchar.h"
 #include "mergesort.h"
+#include "stat_taking.h"
 
 #include <unistd.h>
 #include <stdio.h>
