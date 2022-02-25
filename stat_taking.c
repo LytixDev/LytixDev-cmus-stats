@@ -47,7 +47,7 @@ void cmus_stats_init(void)
         create_table(dbc->db);
 }
 
-void cmus_stats_close(void)
+void cmus_stats_exit(void)
 {
         sqlite3_close(dbc->db);
         free(dbc);
