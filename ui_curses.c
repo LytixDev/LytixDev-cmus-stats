@@ -52,6 +52,7 @@
 #include "mixer.h"
 #include "mpris.h"
 #include "locking.h"
+#include "stat_taking.h"
 #ifdef HAVE_CONFIG
 #include "config/curses.h"
 #include "config/iconv.h"

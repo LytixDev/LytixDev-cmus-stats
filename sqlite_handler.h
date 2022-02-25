@@ -19,6 +19,6 @@
 
 sqlite3 *connect_to_db(char *db_name);
 int insert_data(sqlite3 *db, char *query, int id, char *title, char *artist, int duration);
+
 /* will create table, if it already exists it does not excecute */
 int create_table(sqlite3 *db);
-
