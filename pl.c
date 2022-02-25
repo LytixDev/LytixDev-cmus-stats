@@ -16,6 +16,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "cmus.h"
 #include "pl.h"
 #include "prog.h"
 #include "editable.h"
@@ -333,6 +334,9 @@ static struct track_info *pl_play_track(struct playlist *pl, struct simple_track
 	/* reference owned by the caller */
 	track_info_ref(pl_playing_track->info);
 
+
+        /* cmus-stats hook */
+        save_track_info_to_db(pl_playing_track->info);
 	return pl_playing_track->info;
 }
 
