@@ -7,4 +7,4 @@ touch "$HOME/.local/share/cmus-stats/cmus-stats.db"
 gcc -o sqlite_handler.o sqlite_handler.c
 make clean
 sh configure
-sudo make install destdir=/tmp/cmus
+sudo make install
