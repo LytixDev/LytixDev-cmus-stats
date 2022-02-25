@@ -50,6 +50,7 @@ void cmus_stats_init(void)
 void cmus_stats_close(void)
 {
         sqlite3_close(dbc->db);
+        free(dbc);
 }
 
 bool db_connected(void)
