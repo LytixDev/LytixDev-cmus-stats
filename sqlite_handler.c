@@ -16,9 +16,11 @@
  */
 
 #include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <sqlite3.h>
 #include <string.h>
+#include <time.h>
 
 #include "sqlite_handler.h"
 
@@ -41,8 +43,15 @@ sqlite3 *connect_to_db(char *db_name)
 }
 
 /* insert query parameterized */
-int insert_data(sqlite3 *db, char *query, int id, char *title, char *artist, int duration)
+int insert_data(sqlite3 *db, int id, char *title, char *artist, char *genre, int duration)
 {
+
+        char *query = "INSERT INTO SONGS (ID, TITLE, ARTIST, GENRE, DURATION, YEAR, MONTH, DAY, WDAY, HOUR) " \
+                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        time_t t = time(NULL);
+        struct tm time = *localtime(&t);
+
         sqlite3_stmt *res;
         int rc = sqlite3_prepare_v2(db, query, -1, &res, 0);
 
@@ -50,7 +59,13 @@ int insert_data(sqlite3 *db, char *query, int id, char *title, char *artist, int
                 sqlite3_bind_int(res, 1, id);
                 sqlite3_bind_text(res, 2, title, strlen(title), NULL);
                 sqlite3_bind_text(res, 3, artist, strlen(artist), NULL);
-                sqlite3_bind_int(res, 4, duration);
+                sqlite3_bind_text(res, 4, genre, strlen(genre), NULL);
+                sqlite3_bind_int(res, 5, duration);
+                sqlite3_bind_int(res, 6, time.tm_year + 1900);
+                sqlite3_bind_int(res, 7, time.tm_mon + 1);
+                sqlite3_bind_int(res, 8, time.tm_mday);
+                sqlite3_bind_int(res, 9, time.tm_wday);
+                sqlite3_bind_int(res, 10, time.tm_hour + 1);
         } else {
                 fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(db));
                 return 1;
@@ -68,7 +83,13 @@ int create_table(sqlite3 *db)
                       "ID INT NOT NULL," \
                       "TITLE VARCHAR," \
                       "ARTIST VARCHAR," \
-                      "DURATION INT);";
+                      "GENRE VARCHAR," \
+                      "DURATION INT," \
+                      "YEAR INT," \
+                      "MONTH INT," \
+                      "DAY INT," \
+                      "WDAY INT," \
+                      "HOUR INT);";
         char *err_msg = 0;
         int rc = sqlite3_exec(db, query, NULL, 0, &err_msg);
 

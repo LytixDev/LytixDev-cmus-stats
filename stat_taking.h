@@ -39,7 +39,7 @@ struct db_ctx
 void cmus_stats_init(void);
 
 /* closes the connection to the db */
-void cmus_stats_close(void);
+void cmus_stats_exit(void);
 
 /* returns true if there is a database connection and vice versa */
 bool db_connected(void);
