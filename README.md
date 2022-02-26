@@ -7,7 +7,7 @@ You like cmus? You like graphs? You'll love cmus-stats!
 
 cmus-stats is a fork of the FOSS music player <a href="https://github.com/cmus/cmus">cmus</a> that adds stat taking and spotify wrapped-like graphs. On playing a song, cmus-stats stores track data locally in a SQlite3 type database. cmus-stats comes with scripts that will generate graphs and diagrams based on the local data.
 
-Copyright © 20222 Nicolai Brand <nicolaibrand2002@gmail.com>
+Copyright © 2022 Nicolai Brand <nicolaibrand2002@gmail.com>
 
 Copyright © 2008-2017 Various Authors
 
