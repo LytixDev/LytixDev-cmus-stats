@@ -63,8 +63,7 @@ void save_track_info_to_db(struct track_info *ti)
         int MAX_LEN = 512;
         char title[MAX_LEN];
         char artist[MAX_LEN];
-        char *query = "INSERT INTO SONGS (ID, TITLE, ARTIST, DURATION) " \
-                      "VALUES (?, ?, ?, ?)";
+        char genre[MAX_LEN];
         char *empty = "None";
 
         if (ti->title == NULL)
@@ -81,5 +80,12 @@ void save_track_info_to_db(struct track_info *ti)
         else
             strcpy(artist, ti->artist);
 
-        insert_data(dbc->db, query, ti->uid, title, artist, ti->duration);
+        if (ti->genre == NULL)
+            strcpy(genre, empty);
+        else if (strlen(ti->genre) > MAX_LEN)
+            strcpy(genre, empty);
+        else
+            strcpy(genre, ti->genre);
+
+        insert_data(dbc->db, ti->uid, title, artist, genre, ti->duration);
 }
