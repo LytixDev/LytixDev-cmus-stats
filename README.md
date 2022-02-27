@@ -1,29 +1,25 @@
-cmus — C\* Music Player
+cmus-stats 
 =======================
 
-https://cmus.github.io/
+You like cmus? You like graphs? You'll love cmus-stats!
 
-[![Build Status](https://travis-ci.org/cmus/cmus.svg?branch=master)](https://travis-ci.org/cmus/cmus)
+(work in progress)
 
-Copyright © 2004-2008 Timo Hirvonen <tihirvon@gmail.com>
+cmus-stats is a fork of the FOSS music player <a href="https://github.com/cmus/cmus">cmus</a> that adds stat taking and spotify wrapped-like graphs. On playing a song, cmus-stats stores track data locally in a SQlite3 type database. cmus-stats comes with scripts that will generate graphs and diagrams based on the local data.
+
+Copyright © 2022 Nicolai Brand <nicolaibrand2002@gmail.com>
 
 Copyright © 2008-2017 Various Authors
 
+Copyright © 2004-2008 Timo Hirvonen <tihirvon@gmail.com>
 
-Configuration
+
+Configuration (temporary)
 -------------
 
-List available optional features
+Due to the fact it's still in developement, the temporary way to build and configure cmus-stats is all done by running
 
-    $ ./configure --help
-
-Auto-detect everything
-
-    $ ./configure
-
-To disable some feature, arts for example, and install to `$HOME` run
-
-    $ ./configure prefix=$HOME CONFIG_ARTS=n
+    $ ./test_build.sh
 
 After running configure you can see from the generated `config.mk` file
 what features have been configured in (see the `CONFIG_*` options).
@@ -43,30 +39,6 @@ script:
 The Tremor library is supposed to be used on hardware that has no FPU.
 
 
-Building
---------
-
-    $ make
-
-Or on some BSD systems you need to explicitly use GNU make:
-
-    $ gmake
-
-
-Installation
-------------
-
-    $ make install
-
-Or to install to a temporary directory:
-
-    $ make install DESTDIR=~/tmp/cmus
-
-This is useful when creating binary packages.
-
-Remember to replace `make` with `gmake` if needed.
-
-
 Manuals
 -------
 
@@ -77,29 +49,15 @@ And
     $ man cmus
 
 
-Mailing List
-------------
-
-To subscribe to cmus-devel@lists.sourceforge.net or view the archive visit
-http://lists.sourceforge.net/lists/listinfo/cmus-devel.
-
-The mailing list now serves as an archive for old releases and issues.
-Please use the GitHub [issues](https://github.com/cmus/cmus/issues)
-page for any problems, suggestions, or bug reports.
-
-
-Reporting Bugs
+Git Repository
 --------------
 
-Bugs should be reported using the GitHub [issue tracker](https://github.com/cmus/cmus/issues).
-When creating a new issue, a template will be shown containing instructions on how to collect
-the necessary information.
+https://github.com/LytixDev/cmus-stats
 
-Additional debug information can be found in `~/cmus-debug.txt` if you configured cmus with
-maximum debug level (`./configure DEBUG=2`). In case of a crash the last lines may be helpful.
+    $ git clone https://github.com/LytixDev/cmus-stats.git
+    
 
-
-Git Repository
+Git Repository of cmus
 --------------
 
 https://github.com/cmus/cmus
@@ -114,6 +72,8 @@ cmus uses the [Linux kernel coding style](https://www.kernel.org/doc/html/latest
 Use hard tabs.  Tabs are _always_ 8 characters wide.  Keep the style consistent with rest of the
 code.
 
-Bug fixes and implementations of new features should be suggested as a
-[pull request](https://github.com/cmus/cmus/pulls) directly on GitHub.
 
+Contribute
+-------
+
+Please feel free to contribute to the project by reporting bugs, requeting features or creating pull requests.

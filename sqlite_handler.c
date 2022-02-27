@@ -64,7 +64,6 @@ int insert_data(sqlite3 *db, int id, char *title, char *artist, char *genre, int
                 sqlite3_bind_int(res, 6, time.tm_year + 1900);
                 sqlite3_bind_int(res, 7, time.tm_mon + 1);
                 sqlite3_bind_int(res, 8, time.tm_mday);
-                /* for whatever reason, sunday is 0 and monday is 1 */
                 sqlite3_bind_int(res, 9, time.tm_wday);
                 sqlite3_bind_int(res, 10, time.tm_hour + 1);
         } else {
