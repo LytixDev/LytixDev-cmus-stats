@@ -274,10 +274,6 @@ man: $(man1) $(man7)
 cleandb: 
 	rm -f "$(dbdir)/cmus-stats.db"
 
-hook: 
-	mkdir -p "$(dbdir)"
-	touch "$(dbdir)/cmus-stats.db"
-
 install-main: main
 	$(INSTALL) -m755 $(bindir) cmus cmus-remote
 
@@ -291,7 +287,7 @@ install-data: man
 	$(INSTALL) -m644 $(mandir)/man7 $(man7)
 	$(INSTALL) -m755 $(exampledir) cmus-status-display
 
-install: all hook install-main install-plugins install-data
+install: all install-main install-plugins install-data
 
 tags:
 	exuberant-ctags *.[ch]
