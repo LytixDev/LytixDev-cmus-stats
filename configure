@@ -63,6 +63,12 @@ check_sndio()
 	return $?
 }
 
+check_sqlite3()
+{
+        check_library SQLITE3 "" "-lsqlite3"
+        return $?
+}
+
 check_coreaudio()
 {
 	case `uname -s` in
@@ -72,7 +78,6 @@ check_coreaudio()
 	esac
 	return 1
 }
-
 
 check_compat()
 {
@@ -477,6 +482,7 @@ int main() {
 
 # defaults
 prefix=/usr/local
+dbdir="$HOME/.local/share/cmus-stats/"
 DEBUG=1
 HAVE_CDDB=n
 CONFIG_TREMOR=n
@@ -600,6 +606,7 @@ check check_coreaudio  CONFIG_COREAUDIO
 check check_arts       CONFIG_ARTS
 check check_oss        CONFIG_OSS
 check check_sndio      CONFIG_SNDIO
+check check_sqlite3    CONFIG_SQLITE3
 check check_sun        CONFIG_SUN
 check check_waveout    CONFIG_WAVEOUT
 check check_roar       CONFIG_ROAR
@@ -636,7 +643,7 @@ config_header config/xmalloc.h HAVE_STRDUP HAVE_STRNDUP
 
 CFLAGS="${CFLAGS} -DHAVE_CONFIG"
 
-makefile_vars bindir datadir libdir mandir exampledir
+makefile_vars bindir datadir dbdir libdir mandir exampledir
 makefile_vars \
 	CONFIG_AAC CONFIG_ALSA CONFIG_AO CONFIG_ARTS CONFIG_CDIO \
 	CONFIG_COREAUDIO CONFIG_CUE CONFIG_FFMPEG CONFIG_FLAC CONFIG_JACK \
