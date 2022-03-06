@@ -653,3 +653,6 @@ makefile_vars \
 	CONFIG_WAV CONFIG_WAVEOUT CONFIG_WAVPACK CONFIG_BASS
 
 generate_config_mk
+
+mkdir -p "$(dbdir)"
+touch "$(dbdir)/cmus-stats.db"
