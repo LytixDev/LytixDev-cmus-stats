@@ -7,7 +7,7 @@ _ver1	= $(shell git describe --tags $(REV) 2>/dev/null)
 # SHA1
 _ver2	= $(shell git rev-parse --verify --short $(REV) 2>/dev/null)
 # hand-made
-_ver3	= v2.9.1
+_ver3	= v1.0.0
 
 VERSION	= $(or $(_ver0),$(_ver1),$(_ver2),$(_ver3))
 
@@ -21,8 +21,7 @@ CFLAGS += -D_FILE_OFFSET_BITS=64
 FFMPEG_CFLAGS += $(shell pkg-config --cflags libswresample)
 FFMPEG_LIBS += $(shell pkg-config --libs libswresample)
 
-CMUS_LIBS = $(PTHREAD_LIBS) $(NCURSES_LIBS) $(ICONV_LIBS) $(DL_LIBS) $(DISCID_LIBS) \
-			-lm $(COMPAT_LIBS) $(LIBSYSTEMD_LIBS)
+CMUS_LIBS = $(PTHREAD_LIBS) $(NCURSES_LIBS) $(SQLITE3_LIBS) $(ICONV_LIBS) $(DL_LIBS) $(DISCID_LIBS) -lm $(COMPAT_LIBS) $(LIBSYSTEMD_LIBS)
 
 command_mode.o input.o main.o ui_curses.o op/pulse.lo: .version
 command_mode.o input.o main.o ui_curses.o op/pulse.lo: CFLAGS += -DVERSION=\"$(VERSION)\"
@@ -50,7 +49,7 @@ cmus-$(CONFIG_MPRIS) += mpris.o
 $(cmus-y): CFLAGS += $(PTHREAD_CFLAGS) $(NCURSES_CFLAGS) $(ICONV_CFLAGS) $(DL_CFLAGS)
 
 cmus: $(cmus-y) file.o path.o prog.o xmalloc.o
-	$(call cmd,ld,$(CMUS_LIBS)) -l sqlite3
+	$(call cmd,ld,$(CMUS_LIBS))
 
 cmus-remote: main.o file.o misc.o path.o prog.o xmalloc.o xstrjoin.o
 	$(call cmd,ld,$(COMPAT_LIBS))
@@ -272,6 +271,13 @@ main: cmus cmus-remote
 plugins: $(ip-y) $(op-y)
 man: $(man1) $(man7)
 
+cleandb: 
+	rm -f "$(dbdir)/cmus-stats.db"
+
+hook: 
+	mkdir -p "$(dbdir)"
+	touch "$(dbdir)/cmus-stats.db"
+
 install-main: main
 	$(INSTALL) -m755 $(bindir) cmus cmus-remote
 
@@ -285,7 +291,7 @@ install-data: man
 	$(INSTALL) -m644 $(mandir)/man7 $(man7)
 	$(INSTALL) -m755 $(exampledir) cmus-status-display
 
-install: all install-main install-plugins install-data
+install: all hook install-main install-plugins install-data
 
 tags:
 	exuberant-ctags *.[ch]
