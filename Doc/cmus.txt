@@ -2,7 +2,7 @@
 
 @h1 NAME
 
-cmus - C\* Music Player
+cmus-stats - fork of cmus, the C\* Music Player
 
 
 @h1 SYNOPSIS
@@ -11,6 +11,12 @@ cmus [*options*]
 
 
 @h1 DESCRIPTION
+
+cmus-stats is a fork of cmus that adds information taking using sqlite3 and
+visualizations in form of grahps and diagrams using python. cmus-stats will by
+default store information about all tracks played in a database located at
+~/.local/share/cmus-stats/cmus-stats.db. The rest of the man page will almost be
+a direct copy from cmus.
 
 cmus is a lightweight ncurses music player. It supports various output methods
 by using dynamically-loaded output plugins. cmus has configurable keybindings
@@ -1693,8 +1699,7 @@ After a crash, the last lines of `~/cmus-debug.txt` may contain useful
 information.  
 
 Feature requests and bug reports should go to the GitHub issue tracker:
-	https://github.com/cmus/cmus/issues
-
+	https://github.com/lytixdev/cmus-stats/issues
 
 @h1 SEE ALSO
 
@@ -1708,4 +1713,5 @@ contributors are listed in the `AUTHORS` file.
 
 This man page was written by Frank Terbeck <ft\@bewatermyfriend.org>,
 Timo Hirvonen <tihirvon\@gmail.com>, Clay Barnes <clay.barnes\@gmail.com>, and
-Patrick Gaskin <patrick\@pgaskin.net>.
+Patrick Gaskin <patrick\@pgaskin.net>. It was updated for cmus-stats by
+Nicolai Brand <nicolaibrand2002\@gmail.com>.

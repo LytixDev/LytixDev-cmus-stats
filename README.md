@@ -7,6 +7,8 @@ You like cmus? You like graphs? You'll love cmus-stats!
 
 cmus-stats is a fork of the FOSS music player <a href="https://github.com/cmus/cmus">cmus</a> that adds stat taking and spotify wrapped-like graphs. On playing a song, cmus-stats stores track data locally in a SQlite3 type database. cmus-stats comes with scripts that will generate graphs and diagrams based on the local data.
 
+This program is licensed under the GNU GPL V2.0. Every file I (Nicolai Brand) have created or modified will state so in the beginning of the file.
+
 Copyright © 2022 Nicolai Brand <nicolaibrand2002@gmail.com>
 
 Copyright © 2008-2017 Various Authors
@@ -14,12 +16,20 @@ Copyright © 2008-2017 Various Authors
 Copyright © 2004-2008 Timo Hirvonen <tihirvon@gmail.com>
 
 
-Configuration (temporary)
+Configuration
 -------------
 
-Due to the fact it's still in developement, the temporary way to build and configure cmus-stats is all done by running
+List available optional features
 
-    $ ./test_build.sh
+    $ ./configure --help
+
+Auto-detect everything
+
+    $ ./configure
+
+To disable some feature, arts for example, and install to `$HOME` run
+
+    $ ./configure prefix=$HOME CONFIG_ARTS=n
 
 After running configure you can see from the generated `config.mk` file
 what features have been configured in (see the `CONFIG_*` options).
@@ -37,6 +47,30 @@ script:
     $ ./configure CONFIG_VORBIS=y CONFIG_TREMOR=y
 
 The Tremor library is supposed to be used on hardware that has no FPU.
+
+
+Building
+--------
+
+    $ make
+
+Or on some BSD systems you need to explicitly use GNU make:
+
+    $ gmake
+
+
+Installation
+------------
+
+    $ make install
+
+Or to install to a temporary directory:
+
+    $ make install DESTDIR=~/tmp/cmus
+
+This is useful when creating binary packages.
+
+Remember to replace `make` with `gmake` if needed.
 
 
 Manuals
