@@ -28,7 +28,7 @@ void cmus_stats_init(void)
 {
         dbc = malloc(sizeof(struct db_ctx));
         char *homedir = getenv("HOME");
-        char *postfix = "/.local/share/cmus-stats/cmus-stats.db";
+        const char *postfix = "/.local/share/cmus-stats/cmus-stats.db";
         if (homedir == NULL) {
                 dbc->db_connected = false;
                 return;
@@ -64,10 +64,14 @@ void save_track_info_to_db(struct track_info *ti)
         char title[MAX_LEN];
         char artist[MAX_LEN];
         char genre[MAX_LEN];
-        char *empty = "None";
+        const char *empty = "None";
 
         if (ti->title == NULL)
-            strcpy(title, empty);
+            if (strlen(ti->filename) < 512)
+                strcpy(title, ti->filename);
+            else
+                strcpy(title, empty);
+        
         else if (strlen(ti->title) > MAX_LEN)
             strcpy(title, empty);
         else
