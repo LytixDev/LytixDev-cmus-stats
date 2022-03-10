@@ -46,8 +46,8 @@ sqlite3 *connect_to_db(char *db_name)
 int insert_data(sqlite3 *db, int id, char *title, char *artist, char *genre, int duration)
 {
 
-        char *query = "INSERT INTO SONGS (ID, TITLE, ARTIST, GENRE, DURATION, YEAR, MONTH, DAY, WDAY, HOUR) " \
-                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        const char *query = "INSERT INTO SONGS (ID, TITLE, ARTIST, GENRE, DURATION, YEAR, MONTH, DAY, WDAY, HOUR) " \
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         time_t t = time(NULL);
         struct tm time = *localtime(&t);
@@ -79,17 +79,17 @@ int insert_data(sqlite3 *db, int id, char *title, char *artist, char *genre, int
 
 int create_table(sqlite3 *db)
 {
-        char *query = "CREATE TABLE SONGS("  \
-                      "ID INT NOT NULL," \
-                      "TITLE VARCHAR," \
-                      "ARTIST VARCHAR," \
-                      "GENRE VARCHAR," \
-                      "DURATION INT," \
-                      "YEAR INT," \
-                      "MONTH INT," \
-                      "DAY INT," \
-                      "WDAY INT," \
-                      "HOUR INT);";
+        const char *query = "CREATE TABLE SONGS("  \
+                            "ID INT NOT NULL," \
+                            "TITLE VARCHAR," \
+                            "ARTIST VARCHAR," \
+                            "GENRE VARCHAR," \
+                            "DURATION INT," \
+                            "YEAR INT," \
+                            "MONTH INT," \
+                            "DAY INT," \
+                            "WDAY INT," \
+                            "HOUR INT);";
         char *err_msg = 0;
         int rc = sqlite3_exec(db, query, NULL, 0, &err_msg);
 
