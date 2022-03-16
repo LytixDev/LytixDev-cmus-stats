@@ -23,7 +23,7 @@ from collections import defaultdict
 UID = 0
 TITLE = 1
 ARTIST = 2
-DURATION = 3
+DURATION = 4
 
 
 def sqlite_init() -> tuple:
@@ -45,7 +45,8 @@ def fetchall_data(cur):
 def find_top_artist(data: str) -> list:
     artists = defaultdict(int)
     for row in data:
-        artists[row[ARTIST]] += 1
+        if row[ARTIST] != "None":
+            artists[row[ARTIST]] += 1
 
     return sorted(artists.items(), key=lambda x: x[1], reverse=True)
 
@@ -53,7 +54,8 @@ def find_top_artist(data: str) -> list:
 def find_top_songs(data: str) -> list:
     songs = defaultdict(int)
     for row in data:
-        songs[row[ARTIST] + " - " + row[TITLE]] += 1
+        if "None" not in (row[ARTIST], row[TITLE]):
+            songs[row[ARTIST] + " - " + row[TITLE]] += 1
 
     return sorted(songs.items(), key=lambda x: x[1], reverse=True)
 
@@ -67,17 +69,18 @@ def find_total_duration(data: str) -> float:
 
 
 def main():
+    MAX = 5
     con, cur = sqlite_init()
     data = fetchall_data(cur)
 
     print("Top artists:")
-    for i in find_top_artist(data):
+    for i in find_top_artist(data)[:MAX]:
         print(i[0] + " : " + str(i[1]))
 
     print("\n")
 
     print("Top songs:")
-    for i in find_top_songs(data):
+    for i in find_top_songs(data)[:MAX]:
         print(i[0] + " : " + str(i[1]))
 
     print("\n")

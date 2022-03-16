@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Copyright 2022 Nicolai Brand
@@ -16,22 +16,34 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-from matplotlib import pyplot as plt
-from stats import fetch_x
-import numpy as np
+from get_stats import fetch_x
+
+MAX_BAR_LEN = 40
+
+
+def _terminal_bar_chart(labels, values, pfix=False):
+    max_value = max(values)
+    scaled_values = [int(MAX_BAR_LEN / (max_value / i)) if i != 0 else 0 for i in values]
+
+    for (i, (val, label)) in enumerate(zip(scaled_values, labels)):
+        if not pfix:
+            print(f"{label}: {'#' * val}")
+        else:
+            print(f"{label}: {'#' * val} {' ' * (MAX_BAR_LEN - val)} {values[i]}h")
 
 
 def listening_clock():
-    # stores the data in a dict where the key is the hour and the value is \
-    # total songs played during that hour
     hours = {k+1:0 for k in range(0, 24)}
     for data in fetch_x("hour"):
         hours[data[0]] += 1
 
-    names = [f"{k-1:02}-{k:02}" for k in hours.keys()]
-    plt.style.use("fivethirtyeight")
-    plt.bar(names, hours.values())
-    plt.show()
+    total_hours = sum(hours.values())
+    print("\nTotal hours listened: ", total_hours, "\n")
+
+    #names = [f"{k-1:02}-{k:02}" for k in hours.keys()]
+    names = [f"{k-1:02}am" if k < 12 + 1 else f"{k-1:02}pm" for k in hours.keys()]
+    values = list(hours.values())
+    _terminal_bar_chart(names, values, pfix=True)
 
 
 if __name__ == "__main__":
