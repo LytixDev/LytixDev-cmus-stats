@@ -15,6 +15,9 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef SQLITE3_HANDLER_H
+#define SQLITE3_HANDLER_H
+
 #include <sqlite3.h>
 #include <time.h>
 
@@ -24,3 +27,5 @@ int insert_data(sqlite3 *db, int id, char *title, char *artist, char *genre, int
 
 /* will create table, if it already exists it does not excecute */
 int create_table(sqlite3 *db);
+
+#endif
